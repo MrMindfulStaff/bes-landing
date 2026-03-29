@@ -146,6 +146,9 @@ function Navbar() {
           <a href="#pricing" className="hover:text-gold transition-colors">
             Pricing
           </a>
+          <a href="#affiliate" className="hover:text-gold transition-colors">
+            Earn
+          </a>
         </div>
         <JoinButton size="sm" />
       </div>
@@ -599,6 +602,112 @@ function Pricing() {
   );
 }
 
+function Affiliate() {
+  return (
+    <section id="affiliate" className="py-24 px-6">
+      <div className="max-w-5xl mx-auto">
+        <div className="text-center mb-16">
+          <p className="text-gold font-semibold text-sm tracking-[0.2em] uppercase mb-4">
+            Earn While You Build
+          </p>
+          <h2
+            className="text-4xl sm:text-5xl font-black mb-4"
+            style={{ fontFamily: "'Playfair Display', serif" }}
+          >
+            Share the Society.{" "}
+            <span className="gold-gradient">Get Paid Monthly.</span>
+          </h2>
+          <p className="text-gray-400 text-lg max-w-2xl mx-auto">
+            Know someone who needs this? Our affiliate program pays you for
+            every founder you bring in — and it keeps paying.
+          </p>
+        </div>
+
+        <div className="grid md:grid-cols-3 gap-8 mb-12">
+          {[
+            {
+              step: "1",
+              title: "Share Your Link",
+              desc: "Every member gets a unique referral link. Share it on social media, in conversations, or with your network.",
+            },
+            {
+              step: "2",
+              title: "They Join",
+              desc: "When someone signs up through your link, they get the full BES experience — all 12 courses, community, everything.",
+            },
+            {
+              step: "3",
+              title: "You Get Paid",
+              desc: "Earn 40% recurring commission — that's $20/month for every member you refer, for as long as they stay.",
+            },
+          ].map((item, i) => (
+            <div
+              key={i}
+              className="card-hover p-8 rounded-xl bg-dark-card border border-dark-border text-center"
+            >
+              <div className="w-12 h-12 rounded-full gold-bg-gradient flex items-center justify-center text-black font-black text-xl mx-auto mb-4">
+                {item.step}
+              </div>
+              <h3 className="text-xl font-bold text-white mb-3">
+                {item.title}
+              </h3>
+              <p className="text-gray-400 leading-relaxed">{item.desc}</p>
+            </div>
+          ))}
+        </div>
+
+        <div className="max-w-2xl mx-auto rounded-2xl bg-dark-card border border-gold/30 p-8 md:p-10">
+          <div className="grid sm:grid-cols-3 gap-6 text-center mb-8">
+            <div>
+              <p
+                className="text-4xl font-black gold-gradient"
+                style={{ fontFamily: "'Playfair Display', serif" }}
+              >
+                40%
+              </p>
+              <p className="text-gray-400 text-sm mt-1">
+                Recurring Commission
+              </p>
+            </div>
+            <div>
+              <p
+                className="text-4xl font-black gold-gradient"
+                style={{ fontFamily: "'Playfair Display', serif" }}
+              >
+                $20
+              </p>
+              <p className="text-gray-400 text-sm mt-1">Per Referral / Month</p>
+            </div>
+            <div>
+              <p
+                className="text-4xl font-black gold-gradient"
+                style={{ fontFamily: "'Playfair Display', serif" }}
+              >
+                &infin;
+              </p>
+              <p className="text-gray-400 text-sm mt-1">No Cap on Earnings</p>
+            </div>
+          </div>
+
+          <div className="text-center">
+            <p className="text-gray-300 mb-6">
+              Refer 10 members and you&apos;re earning{" "}
+              <span className="text-gold font-bold">$200/month</span>.
+              Refer 50 and that&apos;s{" "}
+              <span className="text-gold font-bold">$1,000/month</span> — just
+              for sharing something you believe in.
+            </p>
+            <JoinButton size="md" />
+            <p className="text-xs text-gray-500 mt-3">
+              Affiliate access included with every membership
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function FAQ() {
   const faqs = [
     {
@@ -732,6 +841,7 @@ export default function Home() {
       <Community />
       <Founder />
       <Pricing />
+      <Affiliate />
       <FAQ />
       <FinalCTA />
       <Footer />
