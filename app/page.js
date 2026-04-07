@@ -446,13 +446,11 @@ function Founder() {
         <div className="grid md:grid-cols-5 gap-12 items-center">
           <div className="md:col-span-2 flex justify-center">
             <div className="w-64 h-64 rounded-2xl gold-bg-gradient p-[2px]">
-              <div className="w-full h-full rounded-2xl bg-dark-card flex items-center justify-center">
-                <div className="text-center">
-                  <div className="text-6xl mb-2">👑</div>
-                  <p className="text-gold font-bold text-lg">Reginald Reed</p>
-                  <p className="text-gray-400 text-sm">Founder</p>
-                </div>
-              </div>
+              <img
+                src="/images/founder-reginald.webp"
+                alt="Reginald Reed - Founder"
+                className="w-full h-full rounded-2xl object-cover"
+              />
             </div>
           </div>
 
