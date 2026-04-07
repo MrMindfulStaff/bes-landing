@@ -5,73 +5,72 @@ const courses = [
     title: "Documents & Legal Infrastructure",
     subtitle: "Building Your Business Foundation",
     desc: "Set your business up the right way from day one with essential legal documents, structures, and compliance frameworks.",
-    icon: "📋",
+    image: "/images/course-documents-legal.webp",
   },
   {
     title: "Marketing & Brand",
     subtitle: "Creating a Business That Stands Out",
     desc: "Build a clear brand identity that attracts your ideal customers and sets you apart from the competition.",
-    icon: "📣",
+    image: "/images/course-marketing-brand.webp",
   },
   {
     title: "Sales & Customer Acquisition",
     subtitle: "Turning Leads Into Revenue",
     desc: "Learn how to attract leads, build trust, and close deals that keep your revenue growing.",
-    icon: "💰",
+    image: "/images/course-sales.webp",
   },
   {
     title: "Customer Service & Satisfaction",
     subtitle: "Building Loyal Customers",
     desc: "Deliver exceptional customer experiences that turn first-time buyers into lifelong advocates.",
-    icon: "⭐",
+    image: "/images/course-customer-service.webp",
   },
-  {
-    title: "Financial Advantage",
+  {    title: "Financial Advantage",
     subtitle: "Managing Money for Growth",
     desc: "Master bookkeeping, cash flow management, and financial planning to fuel sustainable growth.",
-    icon: "📊",
+    image: "/images/course-financial-advantage.webp",
   },
   {
     title: "Access to Capital",
     subtitle: "Funding Your Business the Smart Way",
     desc: "Break down how to secure funding — from grants and loans to investors and creative financing.",
-    icon: "🏦",
+    image: "/images/course-access-capital.webp",
   },
   {
     title: "Taxes & Tax Strategy",
     subtitle: "Keeping More of What You Earn",
     desc: "Smart tax planning that protects your profits and keeps you compliant with the basics of business taxation.",
-    icon: "🧾",
+    image: "/images/course-taxes.webp",
   },
   {
     title: "Operations & Workflow",
     subtitle: "Running Your Business Smoothly",
     desc: "Design workflows and systems that save time, reduce errors, and let you focus on growth.",
-    icon: "⚙️",
+    image: "/images/course-operations.webp",
   },
   {
     title: "Mindset & Inner Game",
     subtitle: "Strengthening the Entrepreneur Within",
     desc: "Build resilience, confidence, and the mental toughness every founder needs to win long-term.",
-    icon: "🧠",
+    image: "/images/course-mindset.webp",
   },
   {
     title: "Technology & System Selection",
     subtitle: "Choosing Tools That Work",
     desc: "Select the right platforms and systems that make your business run smarter, not harder.",
-    icon: "💻",
+    image: "/images/course-technology.webp",
   },
   {
     title: "Staffing & Team Building",
     subtitle: "Building the Right Crew",
     desc: "Hire right, manage well, and build a team that amplifies your vision and output.",
-    icon: "👥",
+    image: "/images/course-staffing.webp",
   },
   {
     title: "Exit & Legacy Planning",
     subtitle: "Building What Lasts",
     desc: "Prepare for stepping away on your terms — whether that means selling, transitioning, or building generational wealth.",
-    icon: "🏛️",
+    image: "/images/bes-logo.webp",
   },
 ];
 
@@ -123,9 +122,11 @@ function Navbar() {
     <nav className="fixed top-0 w-full z-50 bg-dark/80 backdrop-blur-md border-b border-dark-border">
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full gold-bg-gradient flex items-center justify-center text-black font-black text-sm">
-            BES
-          </div>
+          <img
+            src="/images/bes-logo.webp"
+            alt="BES Logo"
+            className="w-10 h-10 rounded-full object-contain"
+          />
           <span className="font-bold text-lg hidden sm:block">
             The Black Entrepreneurship Society
           </span>
@@ -135,8 +136,7 @@ function Navbar() {
             About
           </a>
           <a href="#curriculum" className="hover:text-gold transition-colors">
-            Curriculum
-          </a>
+            Curriculum          </a>
           <a href="#community" className="hover:text-gold transition-colors">
             Community
           </a>
@@ -172,6 +172,14 @@ function Hero() {
       </div>
 
       <div className="relative max-w-5xl mx-auto px-6 text-center">
+        <div className="fade-in stagger-1 mb-8">
+          <img
+            src="/images/bes-banner.webp"
+            alt="The Black Entrepreneurship Society"
+            className="mx-auto max-w-xs sm:max-w-sm md:max-w-md"
+          />
+        </div>
+
         <div className="fade-in stagger-1">
           <p className="text-gold font-semibold text-sm tracking-[0.2em] uppercase mb-6">
             Built for Black Founders. By a Black Founder.
@@ -239,8 +247,7 @@ function About() {
             This Ain&apos;t Just Another
             <br />
             <span className="gold-gradient">Business Group</span>
-          </h2>
-        </div>
+          </h2>        </div>
 
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div className="space-y-6 text-gray-300 text-lg leading-relaxed">
@@ -326,7 +333,13 @@ function Curriculum() {
               key={i}
               className="card-hover p-6 rounded-xl bg-dark-card border border-dark-border group"
             >
-              <div className="text-3xl mb-4">{course.icon}</div>
+              <div className="w-16 h-16 mb-4 flex items-center justify-center">
+                <img
+                  src={course.image}
+                  alt={course.title}
+                  className="w-full h-full object-contain rounded-lg"
+                />
+              </div>
               <h3 className="text-lg font-bold text-white mb-1 group-hover:text-gold transition-colors">
                 {course.title}
               </h3>
@@ -345,8 +358,7 @@ function Curriculum() {
 }
 
 function Community() {
-  return (
-    <section id="community" className="py-24 px-6">
+  return (    <section id="community" className="py-24 px-6">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
           <p className="text-gold font-semibold text-sm tracking-[0.2em] uppercase mb-4">
@@ -457,8 +469,7 @@ function Founder() {
             </h2>
             <div className="space-y-4 text-gray-300 text-lg leading-relaxed">
               <p>
-                Reginald Reed is a system architect, process improvement
-                specialist, and tech founder based in Milwaukee, Wisconsin.
+                Reginald Reed is a system architect, process improvement                specialist, and tech founder based in Milwaukee, Wisconsin.
               </p>
               <p>
                 As the founder of The Mindful Companies — a portfolio spanning
@@ -569,8 +580,7 @@ function Pricing() {
               "Private community access",
               "Weekly Flowers on Friday spotlights",
               "Partnership & collaboration channels",
-              "Direct support from the founder",
-              "New content added regularly",
+              "Direct support from the founder",              "New content added regularly",
             ].map((item, i) => (
               <div key={i} className="flex items-center gap-3">
                 <svg
@@ -681,8 +691,7 @@ function Affiliate() {
             <div>
               <p
                 className="text-4xl font-black gold-gradient"
-                style={{ fontFamily: "'Playfair Display', serif" }}
-              >
+                style={{ fontFamily: "'Playfair Display', serif" }}              >
                 &infin;
               </p>
               <p className="text-gray-400 text-sm mt-1">No Cap on Earnings</p>
@@ -793,8 +802,7 @@ function FinalCTA() {
           are building real businesses with real systems — together.
         </p>
         <JoinButton />
-        <p className="text-sm text-gray-500 mt-6">
-          $50/month &bull; Cancel anytime &bull; Full access from day one
+        <p className="text-sm text-gray-500 mt-6">          $50/month &bull; Cancel anytime &bull; Full access from day one
         </p>
       </div>
     </section>
@@ -806,9 +814,11 @@ function Footer() {
     <footer className="py-12 px-6 border-t border-dark-border">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-full gold-bg-gradient flex items-center justify-center text-black font-black text-xs">
-            BES
-          </div>
+          <img
+            src="/images/bes-logo.webp"
+            alt="BES Logo"
+            className="w-8 h-8 rounded-full object-contain"
+          />
           <span className="text-sm text-gray-400">
             &copy; {new Date().getFullYear()} The Black Entrepreneurship
             Society. All rights reserved.
