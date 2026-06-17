@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import Avatar from "@/components/app/Avatar";
 
@@ -25,7 +26,11 @@ export default async function MembersPage() {
 
       <div className="rounded-xl bg-dark-card border border-dark-border divide-y divide-dark-border">
         {(members ?? []).map((m, i) => (
-          <div key={m.id} className="flex items-center gap-4 p-4">
+          <Link
+            key={m.id}
+            href={`/members/${m.id}`}
+            className="flex items-center gap-4 p-4 hover:bg-dark/40 transition-colors"
+          >
             <span
               className={`w-6 text-center font-bold ${
                 i < 3 ? "text-gold" : "text-gray-600"
@@ -46,7 +51,7 @@ export default async function MembersPage() {
               <p className="text-gold font-bold">{m.points}</p>
               <p className="text-xs text-gray-500">Lvl {m.level}</p>
             </div>
-          </div>
+          </Link>
         ))}
         {(members ?? []).length === 0 && (
           <p className="p-10 text-center text-gray-400">No members yet.</p>

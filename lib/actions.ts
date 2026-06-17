@@ -80,9 +80,12 @@ export async function updateProfile(formData: FormData) {
   const payload = {
     full_name: String(formData.get("full_name") || "").trim() || null,
     username: String(formData.get("username") || "").trim() || null,
+    headline: String(formData.get("headline") || "").trim() || null,
     bio: String(formData.get("bio") || "").trim() || null,
     industry: String(formData.get("industry") || "").trim() || null,
+    location: String(formData.get("location") || "").trim() || null,
     avatar_url: String(formData.get("avatar_url") || "").trim() || null,
+    cover_url: String(formData.get("cover_url") || "").trim() || null,
     onboarding_completed: true,
   };
 
@@ -91,5 +94,28 @@ export async function updateProfile(formData: FormData) {
 
   revalidatePath("/profile");
   revalidatePath("/community");
+  return { ok: true };
+}
+
+export async function toggleFollow(targetId: string, isFollowing: boolean) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user || user.id === targetId) return { error: "Cannot follow." };
+
+  if (isFollowing) {
+    await supabase
+      .from("follows")
+      .delete()
+      .eq("follower_id", user.id)
+      .eq("following_id", targetId);
+  } else {
+    await supabase
+      .from("follows")
+      .insert({ follower_id: user.id, following_id: targetId });
+  }
+  revalidatePath(`/members/${targetId}`);
+  revalidatePath("/profile");
   return { ok: true };
 }

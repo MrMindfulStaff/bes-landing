@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { requireUser, getProfile } from "@/lib/auth";
+import { createClient } from "@/lib/supabase/server";
 import AppNav from "@/components/app/AppNav";
 import MobileNav from "@/components/app/MobileNav";
 import Avatar from "@/components/app/Avatar";
@@ -11,6 +12,15 @@ export default async function AppLayout({
 }) {
   await requireUser();
   const profile = await getProfile();
+
+  // Presence heartbeat — powers "Online now" on profiles.
+  if (profile) {
+    const supabase = await createClient();
+    await supabase
+      .from("profiles")
+      .update({ last_active_at: new Date().toISOString() })
+      .eq("id", profile.id);
+  }
 
   return (
     <div className="min-h-screen">
