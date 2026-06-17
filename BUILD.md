@@ -42,15 +42,17 @@ funnel's front door and the member app lives behind it under one domain.
 - [x] Classroom page (lists seeded courses), Events page (live-ready)
 - [x] Landing "Join" → `/signup` (off Skool), added "Log In", price → Free
 - [x] Env-safe: prod stays up before keys; auth shows "coming online"
-- [ ] Avatar **upload** to Storage (currently URL field) — Phase 1.1
-- [ ] Password reset flow — Phase 1.1
-- [ ] Mobile bottom-nav polish — Phase 1.1
+- [x] Avatar **upload** to Storage (Phase 1.1)
+- [x] Password reset flow (Phase 1.1)
+- [x] Mobile bottom-nav (Phase 1.1)
 - **Blocked on YOU:** add Supabase keys to Vercel env + redeploy → everything activates
 
-### ⬜ Phase 2 — Classroom
-- [ ] Course list + course detail (modules/lessons)
-- [ ] Lesson viewer + progress tracking + drip unlock
-- [ ] Admin authoring; publish from `classroom-pipeline.json`
+### ✅ Phase 2 — Classroom (shipped to prod)
+- [x] Course detail: auto-enroll, progress bar, drip-locked lessons
+- [x] Lesson viewer: YouTube/Vimeo embed, content, mark-complete toggle
+- [x] Admin authoring (`/admin`): add/edit/delete modules & lessons, publish toggle, drip days
+- [x] Storage buckets + policies (migration 0003)
+- [ ] Publish straight from `classroom-pipeline.json` — deferred to Phase 5 (engine API)
 
 ### ⬜ Phase 3 — Events + DMs
 - [ ] Events list/detail/RSVP + calendar view
