@@ -4,6 +4,7 @@ Replacing Skool for **The Black Entrepreneurship Society** with our own platform
 Grown from the existing `bes-landing` repo so the public landing becomes the
 funnel's front door and the member app lives behind it under one domain.
 
+- **Live:** [jointhebes.com](https://jointhebes.com) (Vercel production) · **No paywall yet** — free signup
 - **Repo:** `MrMindfulStaff/bes-landing` (branch `platform` → merge to `main` to ship)
 - **Stack:** Next.js 16 (App Router) · Supabase (Postgres/Auth/Realtime/Storage) · Stripe · Vercel
 - **Brand:** dark `#0d0d0d` + gold `#c9a84c`, Inter + Playfair Display
@@ -32,14 +33,19 @@ funnel's front door and the member app lives behind it under one domain.
 - [ ] **YOU:** create Supabase project, run SQL, drop keys into `.env.local` (see `supabase/README.md`)
 - [ ] **YOU:** create Stripe account + $50/mo product
 
-### ⬜ Phase 1 — Social core
-- [ ] Route groups: `(marketing)` public / `(app)` authenticated
-- [ ] Auth pages: `/login`, `/signup`, `/auth/callback`, password reset
-- [ ] App shell: sidebar nav, header, mobile nav
-- [ ] Feed: list + composer + post detail + threaded comments + likes (realtime)
-- [ ] Profiles: view/edit, avatar upload
-- [ ] Gamification: points on actions, level badge, leaderboard, industry cohorts
-- [ ] Point landing "Join" button at `/join` instead of Skool
+### ✅ Phase 1 — Social core (shipped to prod, activates on Supabase keys)
+- [x] `(app)` route group + auth-guarded layout (shell: top bar, sidebar, points/level)
+- [x] Auth: `/login`, `/signup`, Google OAuth, `/auth/callback`, `/auth/signout`
+- [x] Feed: composer + posts + threaded comments + likes + realtime refresh
+- [x] Profiles: view/edit (name, username, industry, bio, avatar URL)
+- [x] Gamification: server-side points triggers (post +10, comment +5), level, leaderboard
+- [x] Classroom page (lists seeded courses), Events page (live-ready)
+- [x] Landing "Join" → `/signup` (off Skool), added "Log In", price → Free
+- [x] Env-safe: prod stays up before keys; auth shows "coming online"
+- [ ] Avatar **upload** to Storage (currently URL field) — Phase 1.1
+- [ ] Password reset flow — Phase 1.1
+- [ ] Mobile bottom-nav polish — Phase 1.1
+- **Blocked on YOU:** add Supabase keys to Vercel env + redeploy → everything activates
 
 ### ⬜ Phase 2 — Classroom
 - [ ] Course list + course detail (modules/lessons)
