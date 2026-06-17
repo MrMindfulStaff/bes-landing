@@ -1,8 +1,10 @@
 import { createClient } from "@/lib/supabase/server";
+import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { redirect } from "next/navigation";
 
-/** Returns the auth user or null. */
+/** Returns the auth user or null. Null when the backend isn't wired yet. */
 export async function getUser() {
+  if (!isSupabaseConfigured) return null;
   const supabase = await createClient();
   const {
     data: { user },
@@ -12,6 +14,7 @@ export async function getUser() {
 
 /** Full profile joined with membership, or null if signed out. */
 export async function getProfile() {
+  if (!isSupabaseConfigured) return null;
   const supabase = await createClient();
   const {
     data: { user },
@@ -33,12 +36,11 @@ export async function requireUser() {
   return user;
 }
 
-/** Redirects to checkout if the user has no active membership. */
+/**
+ * Member access. No paywall yet — any signed-in user is a member.
+ * When the paywall ships, gate on memberships.status here.
+ */
 export async function requireMember() {
-  const profile = await getProfile();
-  if (!profile) redirect("/login");
-  const status = profile.memberships?.[0]?.status ?? profile.memberships?.status;
-  const active = status === "active" || status === "trialing" || profile.role === "admin";
-  if (!active) redirect("/join");
-  return profile;
+  await requireUser();
+  return getProfile();
 }

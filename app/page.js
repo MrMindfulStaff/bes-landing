@@ -1,5 +1,3 @@
-const SKOOL_URL = "https://www.skool.com/blackwealth";
-
 const courses = [
   {
     title: "Documents & Legal Infrastructure",
@@ -97,7 +95,7 @@ const communityFeatures = [
   },
 ];
 
-function JoinButton({ size = "lg", className = "" }) {
+function JoinButton({ size = "lg", className = "", label = "Join the Society — Free" }) {
   const sizeClasses =
     size === "lg"
       ? "px-10 py-4 text-lg"
@@ -107,12 +105,10 @@ function JoinButton({ size = "lg", className = "" }) {
 
   return (
     <a
-      href={SKOOL_URL}
-      target="_blank"
-      rel="noopener noreferrer"
+      href="/signup"
       className={`inline-block gold-bg-gradient text-black font-bold rounded-lg hover:opacity-90 transition-opacity ${sizeClasses} ${className}`}
     >
-      Join The Society — $50/mo
+      {label}
     </a>
   );
 }
@@ -150,7 +146,15 @@ function Navbar() {
             Earn
           </a>
         </div>
-        <JoinButton size="sm" />
+        <div className="flex items-center gap-3">
+          <a
+            href="/login"
+            className="text-sm font-semibold text-gray-200 hover:text-gold transition-colors px-3 py-2"
+          >
+            Log In
+          </a>
+          <JoinButton size="sm" label="Join Free" />
+        </div>
       </div>
     </nav>
   );
@@ -566,9 +570,9 @@ function Pricing() {
               className="text-6xl font-black text-white"
               style={{ fontFamily: "'Playfair Display', serif" }}
             >
-              $50
+              Free
             </span>
-            <span className="text-gray-400 text-lg">/month</span>
+            <span className="text-gray-400 text-lg">to join</span>
           </div>
 
           <div className="space-y-3 text-left mb-10">
@@ -800,7 +804,7 @@ function FinalCTA() {
           are building real businesses with real systems — together.
         </p>
         <JoinButton />
-        <p className="text-sm text-gray-500 mt-6">          $50/month &bull; Cancel anytime &bull; Full access from day one
+        <p className="text-sm text-gray-500 mt-6">          Free to join &bull; Full access from day one
         </p>
       </div>
     </section>
@@ -824,13 +828,8 @@ function Footer() {
         </div>
         <div className="flex items-center gap-6 text-sm text-gray-400">
           <span>A Mindful Companies venture</span>
-          <a
-            href={SKOOL_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:text-gold transition-colors"
-          >
-            Join on Skool
+          <a href="/login" className="hover:text-gold transition-colors">
+            Member Login
           </a>
         </div>
       </div>

@@ -12,6 +12,14 @@ const PROTECTED_PREFIXES = ["/community", "/classroom", "/events", "/messages", 
 export async function updateSession(request: NextRequest) {
   let response = NextResponse.next({ request });
 
+  // Backend not wired yet — keep the public site up, skip auth entirely.
+  if (
+    !process.env.NEXT_PUBLIC_SUPABASE_URL ||
+    !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  ) {
+    return response;
+  }
+
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
