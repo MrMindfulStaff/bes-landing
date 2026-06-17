@@ -8,9 +8,11 @@ One-time setup to bring the backend online.
 3. Wait for it to provision (~2 min).
 
 ## 2. Run the schema
-In the Supabase dashboard → **SQL Editor**:
-1. Paste the contents of [`migrations/0001_init.sql`](migrations/0001_init.sql) → **Run**.
-2. Paste the contents of [`seed.sql`](seed.sql) → **Run**.
+In the Supabase dashboard → **SQL Editor**, run these in order:
+1. [`migrations/0001_init.sql`](migrations/0001_init.sql) — tables + RLS
+2. [`migrations/0002_open_access.sql`](migrations/0002_open_access.sql) — no-paywall + points triggers
+3. [`migrations/0003_storage.sql`](migrations/0003_storage.sql) — storage buckets (avatars, media) + policies
+4. [`seed.sql`](seed.sql) — feed categories + 12 courses
 
 (Or, with the Supabase CLI: `supabase db push` then `supabase db execute -f supabase/seed.sql`.)
 
@@ -32,8 +34,8 @@ After you sign up once, in SQL Editor:
 update profiles set role = 'admin' where id = (select id from auth.users where email = 'reginald@mindfulstaff.com');
 ```
 
-## 6. Storage buckets (Phase 1+)
-Dashboard → **Storage** → create public buckets: `avatars`, `post-media`, `course-media`.
+## 6. Storage buckets
+Already created by `0003_storage.sql` (avatars, post-media, course-media) with the right policies — nothing to do here unless you skipped step 2.
 
 ---
 The `service_role` key is also what the **skool-engine** will use to write through `/api/engine/*` — the channel that finally kills the Chrome-only bottleneck.

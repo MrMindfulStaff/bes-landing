@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { requireUser, getProfile } from "@/lib/auth";
 import AppNav from "@/components/app/AppNav";
+import MobileNav from "@/components/app/MobileNav";
 import Avatar from "@/components/app/Avatar";
 
 export default async function AppLayout({
@@ -30,6 +31,14 @@ export default async function AppLayout({
               <span className="text-gold font-bold">{profile?.points ?? 0}</span>
               <span className="text-gray-500">pts · Lvl {profile?.level ?? 1}</span>
             </div>
+            {profile?.role === "admin" && (
+              <Link
+                href="/admin"
+                className="text-sm text-gray-400 hover:text-gold transition-colors hidden sm:block"
+              >
+                Admin
+              </Link>
+            )}
             <Link href="/profile">
               <Avatar url={profile?.avatar_url} name={profile?.full_name} size={36} />
             </Link>
@@ -43,16 +52,19 @@ export default async function AppLayout({
       </header>
 
       <div className="max-w-6xl mx-auto px-4 py-6 flex gap-6">
-        {/* Sidebar */}
-        <aside className="md:w-56 flex-shrink-0">
-          <div className="md:sticky md:top-20">
+        {/* Sidebar (desktop) */}
+        <aside className="hidden md:block w-56 flex-shrink-0">
+          <div className="sticky top-20">
             <AppNav />
           </div>
         </aside>
 
         {/* Main */}
-        <main className="flex-1 min-w-0">{children}</main>
+        <main className="flex-1 min-w-0 pb-20 md:pb-0">{children}</main>
       </div>
+
+      {/* Bottom nav (mobile) */}
+      <MobileNav />
     </div>
   );
 }

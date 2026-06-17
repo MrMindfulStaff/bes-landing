@@ -44,3 +44,10 @@ export async function requireMember() {
   await requireUser();
   return getProfile();
 }
+
+/** Admin-only pages. Sends non-admins back to the community. */
+export async function requireAdmin() {
+  const profile = await getProfile();
+  if (!profile || profile.role !== "admin") redirect("/community");
+  return profile;
+}
