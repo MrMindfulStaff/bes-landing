@@ -30,8 +30,9 @@ funnel's front door and the member app lives behind it under one domain.
 - [x] Root `middleware.ts` (session refresh + member-area guard)
 - [x] Auth helpers `lib/auth.ts`
 - [x] `.env.example`, `supabase/README.md`
-- [ ] **YOU:** create Supabase project, run SQL, drop keys into `.env.local` (see `supabase/README.md`)
-- [ ] **YOU:** create Stripe account + $50/mo product
+- [x] Supabase project live (ref `oykkqxkpokfpwlhpqjwu`), all SQL run, keys in Vercel env, redeployed
+- [x] Auth Site URL + redirect allowlist set to jointhebes.com
+- [ ] Stripe account + product — deferred (no paywall yet)
 
 ### ✅ Phase 1 — Social core (shipped to prod, activates on Supabase keys)
 - [x] `(app)` route group + auth-guarded layout (shell: top bar, sidebar, points/level)
@@ -42,6 +43,7 @@ funnel's front door and the member app lives behind it under one domain.
 - [x] Classroom page (lists seeded courses), Events page (live-ready)
 - [x] Landing "Join" → `/signup` (off Skool), added "Log In", price → Free
 - [x] Env-safe: prod stays up before keys; auth shows "coming online"
+- [x] **BACKEND LIVE** — Supabase wired, login form renders, auth verified end-to-end
 - [x] Avatar **upload** to Storage (Phase 1.1)
 - [x] Password reset flow (Phase 1.1)
 - [x] Mobile bottom-nav (Phase 1.1)
