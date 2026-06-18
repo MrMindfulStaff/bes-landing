@@ -9,6 +9,7 @@ type Profile = {
   username: string | null;
   avatar_url: string | null;
   cover_url: string | null;
+  cover_position: number | null;
   headline: string | null;
   bio: string | null;
   industry: string | null;
@@ -78,10 +79,13 @@ export default function ProfileView({
       {/* Header card: cover + avatar */}
       <div className="rounded-xl overflow-hidden bg-dark-card border border-dark-border">
         <div
-          className="h-40 sm:h-56 w-full bg-cover bg-center"
+          className="h-40 sm:h-56 w-full bg-cover"
           style={
             profile.cover_url
-              ? { backgroundImage: `url(${profile.cover_url})` }
+              ? {
+                  backgroundImage: `url(${profile.cover_url})`,
+                  backgroundPosition: `center ${profile.cover_position ?? 50}%`,
+                }
               : {
                   background:
                     "linear-gradient(120deg, #a88a3a 0%, #c9a84c 40%, #1a1a1a 100%)",

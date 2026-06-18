@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { updateProfile } from "@/lib/actions";
 import { createClient } from "@/lib/supabase/client";
 import Avatar from "@/components/app/Avatar";
+import CoverEditor from "@/components/profile/CoverEditor";
 
 type Profile = {
   id: string;
@@ -16,6 +17,7 @@ type Profile = {
   location: string | null;
   avatar_url: string | null;
   cover_url: string | null;
+  cover_position: number | null;
 };
 
 export default function ProfileForm({ profile }: { profile: Profile }) {
@@ -24,6 +26,7 @@ export default function ProfileForm({ profile }: { profile: Profile }) {
   const [error, setError] = useState<string | null>(null);
   const [avatarUrl, setAvatarUrl] = useState(profile.avatar_url ?? "");
   const [coverUrl, setCoverUrl] = useState(profile.cover_url ?? "");
+  const [coverPos, setCoverPos] = useState(profile.cover_position ?? 50);
   const [uploading, setUploading] = useState<"avatar" | "cover" | null>(null);
 
   async function upload(file: File, kind: "avatar" | "cover") {
@@ -71,16 +74,9 @@ export default function ProfileForm({ profile }: { profile: Profile }) {
       {/* Cover */}
       <div>
         <label className="block text-sm text-gray-400 mb-1.5">Cover photo</label>
-        <div
-          className="h-32 w-full rounded-lg bg-cover bg-center border border-dark-border"
-          style={
-            coverUrl
-              ? { backgroundImage: `url(${coverUrl})` }
-              : { background: "linear-gradient(120deg, #a88a3a, #c9a84c, #1a1a1a)" }
-          }
-        />
+        <CoverEditor coverUrl={coverUrl} pos={coverPos} onPosChange={setCoverPos} />
         <label className="inline-block mt-2 cursor-pointer rounded-lg border border-dark-border px-4 py-2 text-sm text-gray-200 hover:border-gold hover:text-gold transition-all">
-          {uploading === "cover" ? "Uploading..." : "Upload cover"}
+          {uploading === "cover" ? "Uploading..." : coverUrl ? "Change cover" : "Upload cover"}
           <input
             type="file"
             accept="image/*"
@@ -108,6 +104,7 @@ export default function ProfileForm({ profile }: { profile: Profile }) {
 
       <input type="hidden" name="avatar_url" value={avatarUrl} />
       <input type="hidden" name="cover_url" value={coverUrl} />
+      <input type="hidden" name="cover_position" value={coverPos} />
 
       <div>
         <label className="block text-sm text-gray-400 mb-1.5">Full name</label>
