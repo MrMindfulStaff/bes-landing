@@ -10,10 +10,12 @@ export default function PostComposer({
   categories = [],
   profile,
   fixedCategory,
+  fixedCourse,
 }: {
   categories?: Category[];
   profile: { full_name: string | null; avatar_url: string | null } | null;
   fixedCategory?: { id: string; name: string };
+  fixedCourse?: { id: string; name: string; slug: string };
 }) {
   const [open, setOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -41,7 +43,9 @@ export default function PostComposer({
             onClick={() => setOpen(true)}
             className="flex-1 text-left text-gray-500 bg-dark rounded-lg px-4 py-2.5 border border-dark-border hover:border-gold/50 transition-colors"
           >
-            Share a win, ask a question, drop a resource...
+            {fixedCourse
+              ? "Share a tip with this class..."
+              : "Share a win, ask a question, drop a resource..."}
           </button>
         ) : (
           <span className="text-sm text-gray-400">New post</span>
@@ -64,7 +68,15 @@ export default function PostComposer({
             className="w-full rounded-lg bg-dark border border-dark-border px-4 py-3 text-white focus:border-gold focus:outline-none resize-none"
           />
           <div className="flex items-center justify-between gap-3 flex-wrap">
-            {fixedCategory ? (
+            {fixedCourse ? (
+              <>
+                <input type="hidden" name="course_id" value={fixedCourse.id} />
+                <input type="hidden" name="course_slug" value={fixedCourse.slug} />
+                <span className="text-xs text-gray-500">
+                  Tip for <span className="text-gold">{fixedCourse.name}</span>
+                </span>
+              </>
+            ) : fixedCategory ? (
               <>
                 <input type="hidden" name="category_id" value={fixedCategory.id} />
                 <span className="text-xs text-gray-500">

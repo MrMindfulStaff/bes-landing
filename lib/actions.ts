@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 export async function createPost(formData: FormData) {
   const body = String(formData.get("body") || "").trim();
   const categoryId = formData.get("category_id");
+  const courseId = formData.get("course_id");
   const title = String(formData.get("title") || "").trim() || null;
   if (!body) return { error: "Say something first." };
 
@@ -20,11 +21,45 @@ export async function createPost(formData: FormData) {
     body,
     title,
     category_id: categoryId ? String(categoryId) : null,
+    course_id: courseId ? String(courseId) : null,
   });
   if (error) return { error: error.message };
 
   revalidatePath("/community");
+  const courseSlug = formData.get("course_slug");
+  if (courseSlug) revalidatePath(`/classroom/${courseSlug}`);
   return { ok: true };
+}
+
+export async function createTemplate(formData: FormData) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return { error: "Not signed in." };
+
+  const title = String(formData.get("title") || "").trim();
+  const fileUrl = String(formData.get("file_url") || "").trim();
+  if (!title || !fileUrl) return { error: "Title and a file are required." };
+
+  const { error } = await supabase.from("templates").insert({
+    course_id: String(formData.get("course_id")),
+    title,
+    description: String(formData.get("description") || "").trim() || null,
+    file_url: fileUrl,
+    file_name: String(formData.get("file_name") || "").trim() || null,
+    created_by: user.id,
+  });
+  if (error) return { error: error.message };
+
+  revalidatePath(`/classroom/${formData.get("course_slug")}`);
+  return { ok: true };
+}
+
+export async function deleteTemplate(id: string, courseSlug: string) {
+  const supabase = await createClient();
+  await supabase.from("templates").delete().eq("id", id);
+  revalidatePath(`/classroom/${courseSlug}`);
 }
 
 export async function addComment(formData: FormData) {
