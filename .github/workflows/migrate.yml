@@ -26,7 +26,7 @@ jobs:
       # Mark them as already-applied so `db push` only runs new ones (0007+).
       - name: Record already-applied migrations
         env:
-          DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+          DB_URL: ${{ secrets.SUPERBASE_DB }}
         run: |
           psql "$DB_URL" <<'SQL'
           create schema if not exists supabase_migrations;
@@ -47,5 +47,5 @@ jobs:
 
       - name: Apply pending migrations
         env:
-          DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+          DB_URL: ${{ secrets.SUPERBASE_DB }}
         run: supabase db push --db-url "$DB_URL"
