@@ -1,0 +1,7 @@
+Category,Example,Your Numbers,Type
+Selling Price per Unit ($),50,,Inputs
+Variable Cost per Unit ($),30,,Inputs
+Fixed Costs per Month ($),5000,,Inputs
+Contribution Margin per Unit (Price - Variable Cost),20,,Outputs
+Break-Even Units (Fixed Costs ÷ Contribution Margin),250,,Outputs
+Break-Even Sales ($) (Break-Even Units × Selling Price),12500,,Outputs
