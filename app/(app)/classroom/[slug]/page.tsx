@@ -28,7 +28,7 @@ export default async function CoursePage({
 
   const { data: course } = await supabase
     .from("courses")
-    .select("id, title, subtitle, description")
+    .select("id, title, subtitle, description, cover_url")
     .eq("slug", slug)
     .single();
   if (!course) notFound();
@@ -74,7 +74,14 @@ export default async function CoursePage({
         ← Classroom
       </Link>
 
-      <div className="flex items-start justify-between gap-4 mt-2 mb-6">
+      {course.cover_url && (
+        <div
+          className="aspect-[21/9] w-full rounded-xl bg-cover bg-center mt-2 border border-dark-border"
+          style={{ backgroundImage: `url(${course.cover_url})` }}
+        />
+      )}
+
+      <div className="flex items-start justify-between gap-4 mt-4 mb-6">
         <div>
           <h1
             className="text-2xl font-black"
