@@ -17,7 +17,7 @@ export async function getProfileData(targetId: string, viewerId: string | null) 
     .single();
   if (!profile) return null;
 
-  const [followersRes, followingRes, postsRes, followRes, likesRes] = await Promise.all([
+  const [followersRes, followingRes, postsRes, followRes, likesRes, badgesRes, earnedRes] = await Promise.all([
     supabase.from("follows").select("*", { count: "exact", head: true }).eq("following_id", targetId),
     supabase.from("follows").select("*", { count: "exact", head: true }).eq("follower_id", targetId),
     supabase.from("posts").select(POST_SELECT).eq("author_id", targetId).order("created_at", { ascending: false }).limit(30),
@@ -27,6 +27,8 @@ export async function getProfileData(targetId: string, viewerId: string | null) 
     viewerId
       ? supabase.from("likes").select("post_id").eq("user_id", viewerId)
       : Promise.resolve({ data: [] as { post_id: string }[] }),
+    supabase.from("badges").select("slug, name, description, icon, sort_order").order("sort_order"),
+    supabase.from("user_badges").select("badge_slug").eq("user_id", targetId),
   ]);
 
   const posts = ((postsRes.data ?? []) as unknown as FeedPost[]).map((p) => ({
@@ -43,5 +45,7 @@ export async function getProfileData(targetId: string, viewerId: string | null) 
     isFollowing: Boolean(followRes.data),
     posts,
     likedSet: new Set(((likesRes.data ?? []) as { post_id: string }[]).map((l) => l.post_id)),
+    badges: (badgesRes.data ?? []) as { slug: string; name: string; description: string; icon: string }[],
+    earnedBadges: new Set(((earnedRes.data ?? []) as { badge_slug: string }[]).map((b) => b.badge_slug)),
   };
 }

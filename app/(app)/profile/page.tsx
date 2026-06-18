@@ -20,6 +20,8 @@ export default async function ProfilePage() {
       posts={data.posts}
       likedSet={data.likedSet}
       me={me}
+      badges={data.badges}
+      earnedBadges={data.earnedBadges}
     />
   );
 }

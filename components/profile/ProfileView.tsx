@@ -64,6 +64,8 @@ export default function ProfileView({
   posts,
   likedSet,
   me,
+  badges,
+  earnedBadges,
 }: {
   profile: Profile;
   isOwn: boolean;
@@ -73,6 +75,8 @@ export default function ProfileView({
   posts: FeedPost[];
   likedSet: Set<string>;
   me: { full_name: string | null; avatar_url: string | null } | null;
+  badges: { slug: string; name: string; description: string; icon: string }[];
+  earnedBadges: Set<string>;
 }) {
   const status = presence(profile.last_active_at);
   const prog = levelProgress(profile.points);
@@ -184,6 +188,40 @@ export default function ProfileView({
               )}
             </div>
           </div>
+
+          {/* Badges */}
+          {badges.length > 0 && (
+            <div className="rounded-xl bg-dark-card border border-dark-border p-5">
+              <div className="flex items-center justify-between mb-3">
+                <h2 className="font-bold text-white">Badges</h2>
+                <span className="text-xs text-gray-500">
+                  {badges.filter((b) => earnedBadges.has(b.slug)).length}/{badges.length}
+                </span>
+              </div>
+              <div className="grid grid-cols-4 gap-3">
+                {badges.map((b) => {
+                  const earned = earnedBadges.has(b.slug);
+                  return (
+                    <div
+                      key={b.slug}
+                      title={`${b.name} — ${b.description}${earned ? "" : "  (locked)"}`}
+                      className="flex flex-col items-center"
+                    >
+                      <div
+                        className={`w-11 h-11 rounded-full flex items-center justify-center text-xl ${
+                          earned
+                            ? "bg-gold/15 ring-1 ring-gold"
+                            : "bg-dark border border-dark-border opacity-40 grayscale"
+                        }`}
+                      >
+                        {b.icon}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
         </aside>
 
         <div className="md:col-span-2">
