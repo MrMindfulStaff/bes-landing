@@ -5,12 +5,10 @@ import { createCategory } from "@/lib/actions";
 import { createClient } from "@/lib/supabase/client";
 
 const COLORS = ["#c9a84c", "#2d8a4e", "#3b82f6", "#eab308", "#a855f7", "#ef4444", "#06b6d4", "#f59e0b"];
-const EMOJIS = ["💬", "🤝", "🔗", "🌟", "🛍️", "📉", "📈", "🌻", "🚀", "💡", "🏆", "❤️", "🎯", "🧠"];
 
 export default function AddThreadTile() {
   const [open, setOpen] = useState(false);
   const [color, setColor] = useState(COLORS[0]);
-  const [icon, setIcon] = useState(EMOJIS[0]);
   const [coverUrl, setCoverUrl] = useState("");
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -85,7 +83,6 @@ export default function AddThreadTile() {
                   <img src={coverUrl} alt="" className="absolute inset-0 w-full h-full object-cover" />
                 )}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
-                <div className="absolute bottom-2 left-3 text-xl">{icon}</div>
               </div>
 
               <input
@@ -99,22 +96,6 @@ export default function AddThreadTile() {
                 placeholder="Short description (optional)"
                 className="w-full rounded-lg bg-dark border border-dark-border px-4 py-2.5 text-sm text-white focus:border-gold focus:outline-none"
               />
-
-              <div>
-                <p className="text-xs text-gray-400 mb-1.5">Icon</p>
-                <div className="flex flex-wrap gap-1.5">
-                  {EMOJIS.map((em) => (
-                    <button
-                      type="button"
-                      key={em}
-                      onClick={() => setIcon(em)}
-                      className={`w-8 h-8 rounded-lg text-lg ${icon === em ? "bg-gold/20 ring-1 ring-gold" : "hover:bg-dark"}`}
-                    >
-                      {em}
-                    </button>
-                  ))}
-                </div>
-              </div>
 
               <div>
                 <p className="text-xs text-gray-400 mb-1.5">Color</p>
@@ -136,7 +117,6 @@ export default function AddThreadTile() {
                 <input type="file" accept="image/*" onChange={onCover} disabled={uploading} className="hidden" />
               </label>
 
-              <input type="hidden" name="icon" value={icon} />
               <input type="hidden" name="color" value={color} />
               <input type="hidden" name="cover_url" value={coverUrl} />
 

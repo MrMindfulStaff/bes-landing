@@ -55,20 +55,12 @@ export default async function ThreadPage({
         ← All threads
       </Link>
 
-      <div className="flex items-center gap-3 mt-2 mb-1">
-        <div
-          className="w-11 h-11 rounded-xl flex items-center justify-center text-2xl flex-shrink-0"
-          style={{ background: `linear-gradient(135deg, ${category.color || "#c9a84c"} 0%, #0d0d0d 95%)` }}
-        >
-          {category.icon}
-        </div>
-        <h1
-          className="text-2xl font-black"
-          style={{ fontFamily: "'Playfair Display', serif" }}
-        >
-          {category.name}
-        </h1>
-      </div>
+      <h1
+        className="text-2xl font-black mt-2 mb-1"
+        style={{ fontFamily: "'Playfair Display', serif" }}
+      >
+        {category.name}
+      </h1>
       {category.description && (
         <p className="text-gray-500 text-sm mb-6">{category.description}</p>
       )}

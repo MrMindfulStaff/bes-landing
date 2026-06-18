@@ -65,7 +65,6 @@ export default async function CommunityPage() {
               )}
               <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent" />
               <div className="absolute bottom-0 left-0 right-0 p-4">
-                <div className="text-2xl mb-1">{t.icon}</div>
                 <h3 className="font-bold text-white leading-tight group-hover:text-gold transition-colors">
                   {t.name}
                 </h3>
