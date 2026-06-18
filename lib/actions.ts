@@ -170,6 +170,90 @@ export async function createCategory(formData: FormData) {
   return { ok: true };
 }
 
+// ── Events ──────────────────────────────────────────────────────────────────
+export async function createEvent(formData: FormData) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return { error: "Not signed in." };
+
+  const title = String(formData.get("title") || "").trim();
+  const startsAt = String(formData.get("starts_at") || "");
+  if (!title || !startsAt) return { error: "Title and start time are required." };
+
+  const { error } = await supabase.from("events").insert({
+    title,
+    description: String(formData.get("description") || "").trim() || null,
+    location: String(formData.get("location") || "").trim() || null,
+    starts_at: new Date(startsAt).toISOString(),
+    ends_at: formData.get("ends_at") ? new Date(String(formData.get("ends_at"))).toISOString() : null,
+    created_by: user.id,
+  });
+  if (error) return { error: error.message };
+  revalidatePath("/events");
+  return { ok: true };
+}
+
+export async function deleteEvent(id: string) {
+  const supabase = await createClient();
+  await supabase.from("events").delete().eq("id", id);
+  revalidatePath("/events");
+}
+
+export async function rsvpEvent(eventId: string, status: "going" | "maybe" | "declined") {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return { error: "Not signed in." };
+  await supabase
+    .from("event_rsvps")
+    .upsert({ event_id: eventId, user_id: user.id, status }, { onConflict: "event_id,user_id" });
+  revalidatePath("/events");
+  return { ok: true };
+}
+
+// ── Direct messages ─────────────────────────────────────────────────────────
+export async function startDm(targetId: string) {
+  const supabase = await createClient();
+  const { data, error } = await supabase.rpc("get_or_create_dm", { other: targetId });
+  if (error) return { error: error.message };
+  return { id: data as string };
+}
+
+export async function sendMessage(formData: FormData) {
+  const conversationId = String(formData.get("conversation_id") || "");
+  const body = String(formData.get("body") || "").trim();
+  if (!conversationId || !body) return { error: "Empty message." };
+
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return { error: "Not signed in." };
+
+  const { error } = await supabase
+    .from("messages")
+    .insert({ conversation_id: conversationId, sender_id: user.id, body });
+  if (error) return { error: error.message };
+  revalidatePath(`/messages/${conversationId}`);
+  return { ok: true };
+}
+
+export async function markConversationRead(conversationId: string) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return;
+  await supabase
+    .from("conversation_participants")
+    .update({ last_read_at: new Date().toISOString() })
+    .eq("conversation_id", conversationId)
+    .eq("user_id", user.id);
+}
+
 export async function toggleFollow(targetId: string, isFollowing: boolean) {
   const supabase = await createClient();
   const {

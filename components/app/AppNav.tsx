@@ -8,6 +8,7 @@ const LINKS = [
   { href: "/classroom", label: "Classroom", icon: "🎓" },
   { href: "/events", label: "Events", icon: "📅" },
   { href: "/members", label: "Members", icon: "🏆" },
+  { href: "/messages", label: "Messages", icon: "✉️" },
   { href: "/profile", label: "Profile", icon: "👤" },
 ];
 

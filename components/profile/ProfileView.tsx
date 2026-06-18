@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Avatar from "@/components/app/Avatar";
 import FollowButton from "@/components/profile/FollowButton";
+import MessageButton from "@/components/profile/MessageButton";
 import PostCard, { type FeedPost } from "@/components/feed/PostCard";
 import { levelName, levelProgress } from "@/lib/levels";
 
@@ -132,7 +133,10 @@ export default function ProfileView({
                   Edit profile
                 </Link>
               ) : (
-                <FollowButton targetId={profile.id} initialFollowing={isFollowing} />
+                <div className="flex gap-2">
+                  <FollowButton targetId={profile.id} initialFollowing={isFollowing} />
+                  <MessageButton targetId={profile.id} />
+                </div>
               )}
             </div>
           </div>
