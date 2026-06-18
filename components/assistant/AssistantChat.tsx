@@ -4,6 +4,35 @@ import { useEffect, useRef, useState } from "react";
 
 type Msg = { role: "user" | "assistant"; content: string };
 
+// Minimal inline markdown: **bold**, [text](url), and bare links. Dependency-free.
+function renderRich(text: string) {
+  const nodes: React.ReactNode[] = [];
+  const re =
+    /\[([^\]]+)\]\((https?:\/\/[^\s)]+|\/[^\s)]+)\)|\*\*([^*]+)\*\*|(https?:\/\/[^\s)]+|\/[a-zA-Z0-9\-_/]+)/g;
+  let last = 0;
+  let m: RegExpExecArray | null;
+  let k = 0;
+  const link = (href: string, label: string) => (
+    <a
+      key={k++}
+      href={href}
+      {...(href.startsWith("http") ? { target: "_blank", rel: "noreferrer" } : {})}
+      className="text-gold underline underline-offset-2 hover:opacity-80"
+    >
+      {label}
+    </a>
+  );
+  while ((m = re.exec(text))) {
+    if (m.index > last) nodes.push(text.slice(last, m.index));
+    if (m[1]) nodes.push(link(m[2], m[1]));
+    else if (m[3]) nodes.push(<strong key={k++} className="text-white font-semibold">{m[3]}</strong>);
+    else if (m[4]) nodes.push(link(m[4], m[4]));
+    last = re.lastIndex;
+  }
+  if (last < text.length) nodes.push(text.slice(last));
+  return nodes;
+}
+
 const SUGGESTIONS = [
   "How do I price my services for higher-value clients?",
   "Which members should I connect with for a partnership?",
@@ -115,7 +144,9 @@ export default function AssistantChat({ firstName }: { firstName: string | null 
                     : "bg-dark-card border border-dark-border text-gray-200"
                 }`}
               >
-                {m.content || (
+                {m.content ? (
+                  m.role === "assistant" ? renderRich(m.content) : m.content
+                ) : (
                   <span className="inline-flex gap-1 items-center text-gray-500">
                     <span className="animate-pulse">Thinking…</span>
                   </span>
