@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import AppNav from "@/components/app/AppNav";
 import MobileNav from "@/components/app/MobileNav";
 import Avatar from "@/components/app/Avatar";
+import { levelName } from "@/lib/levels";
 
 export default async function AppLayout({
   children,
@@ -13,13 +14,10 @@ export default async function AppLayout({
   await requireUser();
   const profile = await getProfile();
 
-  // Presence heartbeat — powers "Online now" on profiles.
+  // Presence + daily streak (updates last_active_at and awards streak XP once/day).
   if (profile) {
     const supabase = await createClient();
-    await supabase
-      .from("profiles")
-      .update({ last_active_at: new Date().toISOString() })
-      .eq("id", profile.id);
+    await supabase.rpc("touch_streak");
   }
 
   return (
@@ -38,8 +36,8 @@ export default async function AppLayout({
 
           <div className="flex items-center gap-4">
             <div className="hidden sm:flex items-center gap-2 text-sm">
-              <span className="text-gold font-bold">{profile?.points ?? 0}</span>
-              <span className="text-gray-500">pts · Lvl {profile?.level ?? 1}</span>
+              <span className="text-gold font-bold">{profile?.points ?? 0} XP</span>
+              <span className="text-gray-500">· {levelName(profile?.level ?? 1)}</span>
             </div>
             {profile?.role === "admin" && (
               <Link

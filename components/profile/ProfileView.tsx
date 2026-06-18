@@ -2,6 +2,7 @@ import Link from "next/link";
 import Avatar from "@/components/app/Avatar";
 import FollowButton from "@/components/profile/FollowButton";
 import PostCard, { type FeedPost } from "@/components/feed/PostCard";
+import { levelName, levelProgress } from "@/lib/levels";
 
 type Profile = {
   id: string;
@@ -16,6 +17,7 @@ type Profile = {
   location: string | null;
   points: number;
   level: number;
+  streak_days: number | null;
   role: string;
   created_at: string;
   last_active_at: string | null;
@@ -73,6 +75,7 @@ export default function ProfileView({
   me: { full_name: string | null; avatar_url: string | null } | null;
 }) {
   const status = presence(profile.last_active_at);
+  const prog = levelProgress(profile.points);
 
   return (
     <div className="-mt-2">
@@ -137,7 +140,22 @@ export default function ProfileView({
             <Stat value={following} label="Following" />
             <div className="text-center">
               <span className="block font-bold text-gold">{profile.points}</span>
-              <span className="text-xs text-gray-500">pts · Lvl {profile.level}</span>
+              <span className="text-xs text-gray-500">XP · {levelName(profile.level)}</span>
+            </div>
+          </div>
+
+          {/* Level progress */}
+          <div className="mt-4">
+            <div className="flex items-center justify-between text-xs mb-1">
+              <span className="text-gold font-semibold">
+                Lvl {prog.level} · {prog.name}
+              </span>
+              <span className="text-gray-500">
+                {prog.max ? "Max level — Legacy 🏆" : `${prog.toNext} XP to ${prog.nextName}`}
+              </span>
+            </div>
+            <div className="h-2 rounded-full bg-dark overflow-hidden">
+              <div className="h-full gold-bg-gradient" style={{ width: `${prog.pct}%` }} />
             </div>
           </div>
         </div>
@@ -156,8 +174,11 @@ export default function ProfileView({
               {profile.location && <IntroRow icon="📍">{profile.location}</IntroRow>}
               <IntroRow icon="📅">Joined {joinedLabel(profile.created_at)}</IntroRow>
               <IntroRow icon="⭐">
-                Level {profile.level} · {profile.points} points
+                {levelName(profile.level)} · {profile.points} XP
               </IntroRow>
+              {(profile.streak_days ?? 0) > 0 && (
+                <IntroRow icon="🔥">{profile.streak_days}-day streak</IntroRow>
+              )}
               {status && (
                 <IntroRow icon={status.online ? "🟢" : "⚪"}>{status.label}</IntroRow>
               )}
