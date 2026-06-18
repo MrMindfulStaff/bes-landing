@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import AppNav from "@/components/app/AppNav";
 import MobileNav from "@/components/app/MobileNav";
 import Avatar from "@/components/app/Avatar";
+import NotificationBell from "@/components/app/NotificationBell";
 import { levelName } from "@/lib/levels";
 
 export default async function AppLayout({
@@ -39,6 +40,7 @@ export default async function AppLayout({
               <span className="text-gold font-bold">{profile?.points ?? 0} XP</span>
               <span className="text-gray-500">· {levelName(profile?.level ?? 1)}</span>
             </div>
+            {profile && <NotificationBell userId={profile.id} />}
             {profile?.role === "admin" && (
               <Link
                 href="/admin"
