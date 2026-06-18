@@ -5,11 +5,11 @@ import { usePathname } from "next/navigation";
 
 const LINKS = [
   { href: "/community", label: "Community", icon: "💬" },
+  { href: "/assistant", label: "BES AI", icon: "✨" },
   { href: "/classroom", label: "Classroom", icon: "🎓" },
   { href: "/events", label: "Events", icon: "📅" },
   { href: "/members", label: "Members", icon: "🏆" },
   { href: "/messages", label: "Chat", icon: "✉️" },
-  { href: "/profile", label: "Profile", icon: "👤" },
 ];
 
 export default function MobileNav() {
