@@ -20,6 +20,7 @@ type Profile = {
   level: number;
   streak_days: number | null;
   role: string;
+  is_persona?: boolean | null;
   created_at: string;
   last_active_at: string | null;
 };
@@ -111,10 +112,16 @@ export default function ProfileView({
                 style={{ fontFamily: "'Playfair Display', serif" }}
               >
                 {profile.full_name || "Member"}
-                {profile.role === "admin" && (
+                {profile.is_persona ? (
                   <span className="ml-2 align-middle text-xs text-gold bg-gold/10 rounded-full px-2 py-0.5">
-                    Admin
+                    🤝 BES Mentor
                   </span>
+                ) : (
+                  profile.role === "admin" && (
+                    <span className="ml-2 align-middle text-xs text-gold bg-gold/10 rounded-full px-2 py-0.5">
+                      Admin
+                    </span>
+                  )
                 )}
               </h1>
               {profile.username && (

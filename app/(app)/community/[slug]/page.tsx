@@ -9,7 +9,7 @@ import RealtimeRefresher from "@/components/feed/RealtimeRefresher";
 export const metadata = { title: "Thread | BES" };
 
 const POST_SELECT = `id, title, body, created_at, like_count, comment_count, is_pinned,
-  author:profiles!posts_author_id_fkey ( full_name, avatar_url, username ),
+  author:profiles!posts_author_id_fkey ( full_name, avatar_url, username, is_persona ),
   category:categories ( name, icon ),
   comments ( id, body, created_at, author:profiles!comments_author_id_fkey ( full_name, avatar_url ) )`;
 

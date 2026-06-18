@@ -4,7 +4,12 @@ import { useRef, useState, useTransition } from "react";
 import { toggleLike, addComment } from "@/lib/actions";
 import Avatar from "@/components/app/Avatar";
 
-type Person = { full_name: string | null; avatar_url: string | null; username?: string | null };
+type Person = {
+  full_name: string | null;
+  avatar_url: string | null;
+  username?: string | null;
+  is_persona?: boolean | null;
+};
 type Comment = { id: string; body: string; created_at: string; author: Person | null };
 export type FeedPost = {
   id: string;
@@ -56,6 +61,11 @@ export default function PostCard({
             <span className="font-semibold text-white">
               {post.author?.full_name || "Member"}
             </span>
+            {post.author?.is_persona && (
+              <span className="text-xs text-gold bg-gold/10 rounded-full px-2 py-0.5">
+                🤝 BES Mentor
+              </span>
+            )}
             <span className="text-gray-600">·</span>
             <span className="text-sm text-gray-500">{timeAgo(post.created_at)}</span>
             {post.category && (
