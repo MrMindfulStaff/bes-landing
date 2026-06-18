@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { requireAdmin } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import CreateCourseForm from "@/components/admin/CreateCourseForm";
 
 export const metadata = { title: "Admin | BES" };
 
@@ -20,9 +21,22 @@ export default async function AdminPage() {
       >
         Admin
       </h1>
-      <p className="text-gray-500 text-sm mb-6">Author classroom content.</p>
+      <p className="text-gray-500 text-sm mb-6">
+        Author classroom content, run events, and tune the XP structure.
+      </p>
 
-      <h2 className="font-bold text-white mb-3">Courses</h2>
+      <Link
+        href="/admin/xp"
+        className="flex items-center justify-between rounded-xl bg-dark-card border border-dark-border p-4 mb-6 hover:border-gold"
+      >
+        <span className="text-gray-200">⚡ XP &amp; Levels — edit the Founder Ascension ladder</span>
+        <span className="text-sm text-gold">Edit →</span>
+      </Link>
+
+      <div className="flex items-center justify-between mb-3">
+        <h2 className="font-bold text-white">Classrooms</h2>
+        <CreateCourseForm />
+      </div>
       <div className="rounded-xl bg-dark-card border border-dark-border divide-y divide-dark-border">
         {(courses ?? []).map((c) => (
           <Link
@@ -30,10 +44,20 @@ export default async function AdminPage() {
             href={`/admin/courses/${c.slug}`}
             className="flex items-center justify-between p-4 hover:bg-dark/40"
           >
-            <span className="text-gray-200">{c.title}</span>
+            <span className="text-gray-200">
+              {c.title}
+              {!c.is_published && (
+                <span className="ml-2 text-xs text-gray-500 border border-dark-border rounded-full px-2 py-0.5">
+                  draft
+                </span>
+              )}
+            </span>
             <span className="text-sm text-gold">Manage →</span>
           </Link>
         ))}
+        {(courses ?? []).length === 0 && (
+          <p className="p-4 text-sm text-gray-500">No classrooms yet — create your first above.</p>
+        )}
       </div>
     </div>
   );

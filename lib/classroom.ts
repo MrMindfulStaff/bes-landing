@@ -55,6 +55,32 @@ export async function toggleLessonComplete(
 
 // ── Admin authoring (RLS enforces is_admin) ─────────────────────────────────
 
+export async function createCourse(formData: FormData) {
+  const { supabase } = await userOrThrow();
+  const title = String(formData.get("title") || "").trim();
+  if (!title) return { error: "Classroom needs a title." };
+
+  const { error } = await supabase.from("courses").insert({
+    title,
+    slug: slugify(title),
+    subtitle: String(formData.get("subtitle") || "").trim() || null,
+    description: String(formData.get("description") || "").trim() || null,
+    cover_url: String(formData.get("cover_url") || "").trim() || null,
+    is_published: formData.get("is_published") === "on",
+    sort_order: Number(formData.get("sort_order") || 100),
+  });
+  if (error) {
+    return {
+      error: error.message.includes("duplicate")
+        ? "A classroom with that name already exists."
+        : error.message,
+    };
+  }
+  revalidatePath("/admin");
+  revalidatePath("/classroom");
+  return { ok: true, slug: slugify(title) };
+}
+
 export async function createModule(formData: FormData) {
   const { supabase } = await userOrThrow();
   const courseId = String(formData.get("course_id") || "");
