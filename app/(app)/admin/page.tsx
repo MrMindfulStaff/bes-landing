@@ -26,6 +26,14 @@ export default async function AdminPage() {
       </p>
 
       <Link
+        href="/admin/broadcast"
+        className="flex items-center justify-between rounded-xl bg-dark-card border border-dark-border p-4 mb-3 hover:border-gold"
+      >
+        <span className="text-gray-200">📣 Broadcast — announce to the feed + notify &amp; email all members</span>
+        <span className="text-sm text-gold">Compose →</span>
+      </Link>
+
+      <Link
         href="/admin/xp"
         className="flex items-center justify-between rounded-xl bg-dark-card border border-dark-border p-4 mb-6 hover:border-gold"
       >
