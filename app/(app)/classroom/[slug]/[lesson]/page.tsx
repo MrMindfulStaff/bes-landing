@@ -93,9 +93,10 @@ export default async function LessonPage({
       )}
 
       {lesson.content && (
-        <div className="prose-bes text-gray-200 leading-relaxed whitespace-pre-wrap mb-8">
-          {lesson.content}
-        </div>
+        <div
+          className="lesson-content text-gray-200 leading-relaxed mb-8"
+          dangerouslySetInnerHTML={{ __html: lesson.content }}
+        />
       )}
 
       <div className="border-t border-dark-border pt-6">

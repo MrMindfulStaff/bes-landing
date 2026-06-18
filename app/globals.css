@@ -54,3 +54,52 @@ body {
 .stagger-4 { animation-delay: 0.4s; }
 .stagger-5 { animation-delay: 0.5s; }
 .stagger-6 { animation-delay: 0.6s; }
+
+/* Rendered lesson content (imported from .docx) */
+.lesson-content h1,
+.lesson-content h2 {
+  font-family: 'Playfair Display', serif;
+  font-weight: 800;
+  color: #fff;
+  font-size: 1.5rem;
+  margin: 1.5rem 0 0.75rem;
+}
+.lesson-content h3 {
+  font-weight: 700;
+  color: var(--color-gold);
+  font-size: 1.15rem;
+  margin: 1.25rem 0 0.5rem;
+}
+.lesson-content h4 { font-weight: 700; color: #fff; margin: 1rem 0 0.4rem; }
+.lesson-content p { margin: 0.75rem 0; color: #d6d6d6; }
+.lesson-content ul,
+.lesson-content ol { margin: 0.75rem 0 0.75rem 1.25rem; color: #d6d6d6; }
+.lesson-content ul { list-style: disc; }
+.lesson-content ol { list-style: decimal; }
+.lesson-content li { margin: 0.35rem 0; }
+.lesson-content strong { color: #fff; font-weight: 700; }
+.lesson-content a { color: var(--color-gold); text-decoration: underline; }
+.lesson-content hr { border: none; border-top: 1px solid var(--color-dark-border); margin: 2rem 0; }
+.lesson-content table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.9rem; }
+.lesson-content th,
+.lesson-content td { border: 1px solid var(--color-dark-border); padding: 0.5rem 0.75rem; text-align: left; }
+.lesson-content th { background: var(--color-dark-card); color: #fff; }
+
+/* Embedded template download block at the end of a lesson */
+.lesson-template {
+  margin-top: 2rem;
+  padding: 1rem 1.25rem;
+  border: 1px solid var(--color-dark-border);
+  border-radius: 0.75rem;
+  background: var(--color-dark-card);
+}
+.lesson-template .dl {
+  display: inline-block;
+  margin-top: 0.5rem;
+  background: linear-gradient(135deg, var(--color-gold-dark), var(--color-gold));
+  color: #000;
+  font-weight: 700;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  text-decoration: none;
+}
