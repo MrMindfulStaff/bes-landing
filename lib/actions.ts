@@ -86,7 +86,7 @@ export async function updateProfile(formData: FormData) {
     location: String(formData.get("location") || "").trim() || null,
     avatar_url: String(formData.get("avatar_url") || "").trim() || null,
     cover_url: String(formData.get("cover_url") || "").trim() || null,
-    cover_position: Math.max(0, Math.min(100, Number(formData.get("cover_position")) || 50)),
+    cover_position: Math.max(0, Math.min(100, Math.round(Number(formData.get("cover_position")) || 50))),
     onboarding_completed: true,
   };
 
