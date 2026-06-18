@@ -98,6 +98,43 @@ export async function updateProfile(formData: FormData) {
   return { ok: true };
 }
 
+export async function createCategory(formData: FormData) {
+  const name = String(formData.get("name") || "").trim();
+  if (!name) return { error: "Thread name required." };
+
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return { error: "Not signed in." };
+
+  const slug =
+    name
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/(^-|-$)/g, "")
+      .slice(0, 50) || `thread-${Date.now()}`;
+
+  const { error } = await supabase.from("categories").insert({
+    name,
+    slug,
+    icon: String(formData.get("icon") || "").trim() || "💬",
+    color: String(formData.get("color") || "").trim() || "#c9a84c",
+    cover_url: String(formData.get("cover_url") || "").trim() || null,
+    description: String(formData.get("description") || "").trim() || null,
+    sort_order: 100,
+  });
+  if (error) {
+    return {
+      error: error.message.includes("duplicate")
+        ? "A thread with that name already exists."
+        : error.message,
+    };
+  }
+  revalidatePath("/community");
+  return { ok: true };
+}
+
 export async function toggleFollow(targetId: string, isFollowing: boolean) {
   const supabase = await createClient();
   const {

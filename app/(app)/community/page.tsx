@@ -1,42 +1,34 @@
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { getProfile } from "@/lib/auth";
-import PostComposer from "@/components/feed/PostComposer";
-import PostCard, { type FeedPost } from "@/components/feed/PostCard";
-import RealtimeRefresher from "@/components/feed/RealtimeRefresher";
+import AddThreadTile from "@/components/community/AddThreadTile";
 
 export const metadata = { title: "Community | BES" };
+
+type ThreadRow = {
+  id: string;
+  name: string;
+  slug: string;
+  description: string | null;
+  icon: string | null;
+  color: string | null;
+  cover_url: string | null;
+  posts: { count: number }[];
+};
 
 export default async function CommunityPage() {
   const supabase = await createClient();
   const profile = await getProfile();
+  const isAdmin = profile?.role === "admin";
 
-  const [{ data: categories }, { data: posts }, { data: myLikes }] = await Promise.all([
-    supabase.from("categories").select("id, name, icon").order("sort_order"),
-    supabase
-      .from("posts")
-      .select(
-        `id, title, body, created_at, like_count, comment_count, is_pinned,
-         author:profiles!posts_author_id_fkey ( full_name, avatar_url, username ),
-         category:categories ( name, icon ),
-         comments ( id, body, created_at, author:profiles!comments_author_id_fkey ( full_name, avatar_url ) )`
-      )
-      .order("is_pinned", { ascending: false })
-      .order("created_at", { ascending: false })
-      .limit(50),
-    supabase.from("likes").select("post_id").eq("user_id", profile?.id ?? ""),
-  ]);
-
-  const likedSet = new Set((myLikes ?? []).map((l) => l.post_id));
-  const feed = (posts ?? []).map((p) => ({
-    ...p,
-    comments: [...(p.comments ?? [])].sort(
-      (a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
-    ),
-  })) as unknown as FeedPost[];
+  const { data } = await supabase
+    .from("categories")
+    .select("id, name, slug, description, icon, color, cover_url, posts(count)")
+    .order("sort_order");
+  const threads = (data ?? []) as unknown as ThreadRow[];
 
   return (
     <div>
-      <RealtimeRefresher />
       <h1
         className="text-2xl font-black mb-1"
         style={{ fontFamily: "'Playfair Display', serif" }}
@@ -44,27 +36,49 @@ export default async function CommunityPage() {
         Community
       </h1>
       <p className="text-gray-500 text-sm mb-6">
-        Real conversations with founders walking the same path.
+        Pick a thread and jump in. Each one is its own conversation.
       </p>
 
-      <PostComposer categories={categories ?? []} profile={profile} />
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+        {threads.map((t) => {
+          const count = t.posts?.[0]?.count ?? 0;
+          return (
+            <Link
+              key={t.id}
+              href={`/community/${t.slug}`}
+              className="group relative aspect-[4/3] rounded-xl overflow-hidden border border-dark-border card-hover"
+            >
+              {t.cover_url ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={t.cover_url}
+                  alt=""
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
+              ) : (
+                <div
+                  className="absolute inset-0"
+                  style={{
+                    background: `linear-gradient(135deg, ${t.color || "#c9a84c"} 0%, #0d0d0d 95%)`,
+                  }}
+                />
+              )}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent" />
+              <div className="absolute bottom-0 left-0 right-0 p-4">
+                <div className="text-2xl mb-1">{t.icon}</div>
+                <h3 className="font-bold text-white leading-tight group-hover:text-gold transition-colors">
+                  {t.name}
+                </h3>
+                <p className="text-xs text-gray-300 mt-1">
+                  {count} {count === 1 ? "post" : "posts"}
+                </p>
+              </div>
+            </Link>
+          );
+        })}
 
-      {feed.length === 0 ? (
-        <div className="rounded-xl bg-dark-card border border-dark-border p-10 text-center">
-          <p className="text-gray-400">
-            No posts yet. Be the first to share something. 🌱
-          </p>
-        </div>
-      ) : (
-        feed.map((post) => (
-          <PostCard
-            key={post.id}
-            post={post}
-            likedByMe={likedSet.has(post.id)}
-            me={profile}
-          />
-        ))
-      )}
+        {isAdmin && <AddThreadTile />}
+      </div>
     </div>
   );
 }

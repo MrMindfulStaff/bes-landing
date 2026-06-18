@@ -7,11 +7,13 @@ import Avatar from "@/components/app/Avatar";
 type Category = { id: string; name: string; icon: string | null };
 
 export default function PostComposer({
-  categories,
+  categories = [],
   profile,
+  fixedCategory,
 }: {
-  categories: Category[];
+  categories?: Category[];
   profile: { full_name: string | null; avatar_url: string | null } | null;
+  fixedCategory?: { id: string; name: string };
 }) {
   const [open, setOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -62,17 +64,26 @@ export default function PostComposer({
             className="w-full rounded-lg bg-dark border border-dark-border px-4 py-3 text-white focus:border-gold focus:outline-none resize-none"
           />
           <div className="flex items-center justify-between gap-3 flex-wrap">
-            <select
-              name="category_id"
-              className="rounded-lg bg-dark border border-dark-border px-3 py-2 text-sm text-gray-300 focus:border-gold focus:outline-none"
-            >
-              <option value="">No category</option>
-              {categories.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.icon} {c.name}
-                </option>
-              ))}
-            </select>
+            {fixedCategory ? (
+              <>
+                <input type="hidden" name="category_id" value={fixedCategory.id} />
+                <span className="text-xs text-gray-500">
+                  Posting in <span className="text-gold">{fixedCategory.name}</span>
+                </span>
+              </>
+            ) : (
+              <select
+                name="category_id"
+                className="rounded-lg bg-dark border border-dark-border px-3 py-2 text-sm text-gray-300 focus:border-gold focus:outline-none"
+              >
+                <option value="">No category</option>
+                {categories.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.icon} {c.name}
+                  </option>
+                ))}
+              </select>
+            )}
             <div className="flex items-center gap-2">
               <button
                 type="button"
