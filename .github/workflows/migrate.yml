@@ -1,0 +1,51 @@
+name: Supabase migrations
+
+# Applies any new SQL migration files to the production database automatically
+# whenever they land on main. No more manual SQL pasting.
+
+on:
+  push:
+    branches: [main]
+    paths: ["supabase/migrations/**"]
+  workflow_dispatch: {}
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      - name: Install psql
+        run: sudo apt-get update && sudo apt-get install -y postgresql-client
+
+      # The first 6 migrations were applied by hand before this workflow existed.
+      # Mark them as already-applied so `db push` only runs new ones (0007+).
+      - name: Record already-applied migrations
+        env:
+          DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+        run: |
+          psql "$DB_URL" <<'SQL'
+          create schema if not exists supabase_migrations;
+          create table if not exists supabase_migrations.schema_migrations (
+            version    text primary key,
+            statements text[],
+            name       text
+          );
+          insert into supabase_migrations.schema_migrations (version, name) values
+            ('20260617000001','init'),
+            ('20260617000002','open_access'),
+            ('20260617000003','storage'),
+            ('20260617000004','profiles_social'),
+            ('20260617000005','grants'),
+            ('20260617000006','cover_position')
+          on conflict (version) do nothing;
+          SQL
+
+      - name: Apply pending migrations
+        env:
+          DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+        run: supabase db push --db-url "$DB_URL"
