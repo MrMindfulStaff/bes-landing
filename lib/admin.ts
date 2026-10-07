@@ -108,12 +108,20 @@ async function emailAllMembers(subject: string, body: string) {
     "The Black Entrepreneurship Society <team@jointhebes.com>";
 
   const admin = createAdminClient();
+  // Mentor personas have no mailbox — emailing them only produces bounces.
+  const { data: personas, error: personaError } = await admin
+    .from("profiles")
+    .select("id")
+    .eq("is_persona", true);
+  if (personaError) return { sent: 0, note: "Email skipped — couldn't load the member list. The post and in-app alerts still went out." };
+  const personaIds = new Set((personas ?? []).map((p) => p.id));
+
   const emails: string[] = [];
   for (let page = 1; page <= 20; page++) {
     const { data, error } = await admin.auth.admin.listUsers({ page, perPage: 200 });
     if (error) break;
     data.users.forEach((u) => {
-      if (u.email) emails.push(u.email);
+      if (u.email && !personaIds.has(u.id)) emails.push(u.email);
     });
     if (data.users.length < 200) break;
   }
