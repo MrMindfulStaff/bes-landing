@@ -95,6 +95,22 @@ const communityFeatures = [
   },
 ];
 
+function LegalNote({ className = "" }) {
+  return (
+    <p className={`text-xs text-gray-600 ${className}`}>
+      By joining you agree to our{" "}
+      <a href="/terms" className="underline hover:text-gold transition-colors">
+        Terms
+      </a>{" "}
+      and{" "}
+      <a href="/privacy" className="underline hover:text-gold transition-colors">
+        Privacy Policy
+      </a>
+      .
+    </p>
+  );
+}
+
 function JoinButton({ size = "lg", className = "", label = "Join the Society — Free" }) {
   const sizeClasses =
     size === "lg"
@@ -608,6 +624,7 @@ function Pricing() {
           <p className="text-xs text-gray-500 mt-4">
             Cancel anytime. No long-term commitment.
           </p>
+          <LegalNote className="mt-2" />
         </div>
       </div>
     </section>
@@ -804,8 +821,10 @@ function FinalCTA() {
           are building real businesses with real systems — together.
         </p>
         <JoinButton />
-        <p className="text-sm text-gray-500 mt-6">          Free to join &bull; Full access from day one
+        <p className="text-sm text-gray-500 mt-6">
+          Free to join &bull; Full access from day one
         </p>
+        <LegalNote className="mt-2" />
       </div>
     </section>
   );
@@ -826,8 +845,14 @@ function Footer() {
             Society. All rights reserved.
           </span>
         </div>
-        <div className="flex items-center gap-6 text-sm text-gray-400">
+        <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-400">
           <span>A Mindful Companies venture</span>
+          <a href="/privacy" className="hover:text-gold transition-colors">
+            Privacy Policy
+          </a>
+          <a href="/terms" className="hover:text-gold transition-colors">
+            Terms of Service
+          </a>
           <a href="/login" className="hover:text-gold transition-colors">
             Member Login
           </a>

@@ -130,6 +130,20 @@ export default function AuthForm({ mode }: { mode: "login" | "signup" }) {
         >
           {loading ? "..." : isSignup ? "Create my account" : "Log in"}
         </button>
+
+        {isSignup && (
+          <p className="text-xs text-gray-500 text-center">
+            By creating an account you agree to our{" "}
+            <Link href="/terms" className="underline hover:text-gold">
+              Terms
+            </Link>{" "}
+            and{" "}
+            <Link href="/privacy" className="underline hover:text-gold">
+              Privacy Policy
+            </Link>
+            .
+          </p>
+        )}
       </form>
 
       <div className="flex items-center gap-3 my-6">
