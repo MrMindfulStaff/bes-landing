@@ -34,6 +34,14 @@ export default async function AdminPage() {
       </Link>
 
       <Link
+        href="/admin/operator"
+        className="flex items-center justify-between rounded-xl bg-dark-card border border-dark-border p-4 mb-3 hover:border-gold"
+      >
+        <span className="text-gray-200">🤖 Operator — runs BES as you: welcomes, replies, check-ins, weekly posts</span>
+        <span className="text-sm text-gold">Open →</span>
+      </Link>
+
+      <Link
         href="/admin/xp"
         className="flex items-center justify-between rounded-xl bg-dark-card border border-dark-border p-4 mb-6 hover:border-gold"
       >
