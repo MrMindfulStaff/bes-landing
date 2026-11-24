@@ -48,4 +48,4 @@ jobs:
       - name: Apply pending migrations
         env:
           DB_URL: ${{ secrets.SUPERBASE_DB }}
-        run: supabase db push --db-url "$DB_URL"
+        run: supabase db push --db-url "$DB_URL" --yes
