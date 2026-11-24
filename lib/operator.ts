@@ -366,7 +366,7 @@ export async function runOperatorCycle(opts: { force?: boolean } = {}) {
     if (today && !(await done(admin, today.action, "date", date))) {
       const { data: recent } = await admin.from("posts").select("body").eq("author_id", OPERATOR_ID)
         .order("created_at", { ascending: false }).limit(4);
-      const avoid = (recent ?? []).map((r: any) => "- " + (r.body || "").slice(0, 100)).join("\n");
+      const avoid = (recent ?? []).map((r: any) => "- " + Array.from(r.body || "").slice(0, 100).join("")).join("\n");
       const body = await generate(system, `${today.prompt}\nDon't repeat these recent posts of yours:\n${avoid || "(none yet)"}`);
       if (body && !body.includes(NEEDS)) {
         const { data: cat } = await admin.from("categories").select("id").eq("slug", today.slug).maybeSingle();

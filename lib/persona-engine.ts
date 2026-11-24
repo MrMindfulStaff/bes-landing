@@ -75,7 +75,7 @@ export async function runPersonaCycle() {
     const lastAt = last?.[0]?.created_at ? new Date(last[0].created_at).getTime() : 0;
     if (Date.now() - lastAt < POST_INTERVAL_MS) continue;
 
-    const avoid = (last || []).map((r: any) => "- " + (r.body || "").slice(0, 90)).join("\n");
+    const avoid = (last || []).map((r: any) => "- " + Array.from(r.body || "").slice(0, 90).join("")).join("\n");
     const body = await genText(
       personaSystem(p),
       `Write ONE short, valuable post for the BES community feed, in your lane (${p.lane}). 2–5 sentences, conversational, and end with a question that invites members to reply. Don't repeat these recent posts of yours:\n${avoid || "(none yet)"}\nOutput only the post text — no preamble, no quotes.`,
