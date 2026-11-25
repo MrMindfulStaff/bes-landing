@@ -1,9 +1,19 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
+
+// Same rule as is_spam_name() in the database (migration 0034): a name part of 12+
+// characters with 3+ inner capitals and lowercase letters is a bot's random string.
+function looksLikeSpamName(n: string) {
+  const t = n.trim();
+  if (t.length < 2) return true;
+  return t.split(/[\s-]+/).some(
+    (p) => p.length >= 12 && /[a-z]/.test(p) && (p.slice(1).match(/[A-Z]/g) || []).length >= 3,
+  );
+}
 
 export default function AuthForm({ mode }: { mode: "login" | "signup" }) {
   const router = useRouter();
@@ -18,6 +28,12 @@ export default function AuthForm({ mode }: { mode: "login" | "signup" }) {
   const [info, setInfo] = useState<string | null>(null);
 
   const isSignup = mode === "signup";
+  // Bot traps: a hidden field people never see, and a form filled faster than a person can.
+  const [website, setWebsite] = useState("");
+  const openedAt = useRef(0);
+  useEffect(() => {
+    openedAt.current = Date.now();
+  }, []);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -28,6 +44,14 @@ export default function AuthForm({ mode }: { mode: "login" | "signup" }) {
 
     try {
       if (isSignup) {
+        if (website || Date.now() - openedAt.current < 2500) {
+          // Looks like a bot: show the normal message and create nothing.
+          setInfo("Check your email to confirm your account, then log in.");
+          return;
+        }
+        if (looksLikeSpamName(fullName)) {
+          throw new Error("Please enter your real name.");
+        }
         const { data, error } = await supabase.auth.signUp({
           email,
           password,
@@ -36,7 +60,12 @@ export default function AuthForm({ mode }: { mode: "login" | "signup" }) {
             emailRedirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}`,
           },
         });
-        if (error) throw error;
+        if (error) {
+          if (/database error saving new user|real name/i.test(error.message)) {
+            throw new Error("Please enter your real name.");
+          }
+          throw error;
+        }
         if (data.session) {
           router.push(next);
           router.refresh();
@@ -72,6 +101,14 @@ export default function AuthForm({ mode }: { mode: "login" | "signup" }) {
   return (
     <div className="w-full max-w-md">
       <form onSubmit={handleSubmit} className="space-y-4">
+        {isSignup && (
+          <div aria-hidden="true" style={{ position: "absolute", left: "-10000px", width: 1, height: 1, overflow: "hidden" }}>
+            <label>
+              Website
+              <input type="text" name="website" tabIndex={-1} autoComplete="off" value={website} onChange={(e) => setWebsite(e.target.value)} />
+            </label>
+          </div>
+        )}
         {isSignup && (
           <div>
             <label className="block text-sm text-gray-400 mb-1.5">Full name</label>
